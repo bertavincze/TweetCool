@@ -1,7 +1,5 @@
 package com.codecool.web.servlet;
 
-import com.codecool.web.model.Filter;
-import com.codecool.web.model.Tweet;
 import com.codecool.web.service.TweetList;
 import com.codecool.web.service.TweetListFilter;
 
@@ -13,9 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @WebServlet("/tweets")
 public class TweetListServlet extends HttpServlet {
