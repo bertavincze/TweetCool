@@ -31,51 +31,52 @@ public class TweetListFilter {
     }
 
     public TweetList filterList(TweetList tweetList, String poster, Date date) {
+        TweetList filtered = new TweetList();
         setFilter(poster, date);
         if (filter.equals(Filter.DATE)) {
-            filterByDate(tweetList, date);
+            filtered = filterByDate(tweetList, date);
         } else if (filter.equals(Filter.POSTER)) {
-            filterByPoster(tweetList, poster);
+            filtered = filterByPoster(tweetList, poster);
         } else if (filter.equals(Filter.POSTERDATE)) {
-            filterByPosterAndDate(tweetList, poster, date);
+            filtered = filterByPosterAndDate(tweetList, poster, date);
         }
-        filterByLimitAndOffset(tweetList);
-        return tweetList;
+        return filterByLimitAndOffset(filtered);
     }
 
-    private void filterByPoster(TweetList tweetList, String poster) {
-        List<Tweet> filtered = new ArrayList<>();
+    private TweetList filterByPoster(TweetList tweetList, String poster) {
+        TweetList filtered = new TweetList();
         for (Tweet tweet : tweetList.getTweets()) {
             if (tweet.getPosterName().equals(poster)) {
-                filtered.add(tweet);
+                filtered.addTweet(tweet);
             }
         }
-        tweetList.setTweets(filtered);
+        return filtered;
     }
 
-    private void filterByDate(TweetList tweetList, Date date) {
-        List<Tweet> filtered = new ArrayList<>();
+    private TweetList filterByDate(TweetList tweetList, Date date) {
+        TweetList filtered = new TweetList();
         for (Tweet tweet : tweetList.getTweets()) {
             if (tweet.getTimestamp().compareTo(date) >= 0) {
-                filtered.add(tweet);
+                filtered.addTweet(tweet);
             }
         }
-        tweetList.setTweets(filtered);
+        return filtered;
     }
 
-    private void filterByPosterAndDate(TweetList tweetList, String poster, Date date) {
-        filterByPoster(tweetList, poster);
-        filterByDate(tweetList, date);
+    private TweetList filterByPosterAndDate(TweetList tweetList, String poster, Date date) {
+        TweetList filtered = filterByPoster(tweetList, poster);
+        filtered = filterByDate(filtered, date);
+        return filtered;
     }
 
-    private void filterByLimitAndOffset(TweetList tweetList) {
-        List<Tweet> filtered = new ArrayList<>();
+    private TweetList filterByLimitAndOffset(TweetList tweetList) {
+        TweetList filtered = new TweetList();
         if (tweetList.getTweets().size() < limit) {
             limit = tweetList.getTweets().size();
         }
         for (int i = offset; i < limit; i++) {
-            filtered.add(tweetList.getTweets().get(i));
+            filtered.addTweet(tweetList.getTweets().get(i));
         }
-        tweetList.setTweets(filtered);
+        return filtered;
     }
 }

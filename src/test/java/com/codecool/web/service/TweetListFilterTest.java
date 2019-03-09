@@ -44,21 +44,21 @@ class TweetListFilterTest {
 
     @Test
     void filterListByDate() {
-        tweetListFilter.filterList(tweetList, null, ancientDate);
+        tweetList = tweetListFilter.filterList(tweetList, null, ancientDate);
         assertEquals(Arrays.asList(tweetDonald, tweetYoda), tweetList.getTweets());
-        tweetListFilter.filterList(tweetList, null, recentDate);
+        tweetList = tweetListFilter.filterList(tweetList, null, recentDate);
         assertEquals(Collections.singletonList(tweetDonald), tweetList.getTweets());
     }
 
     @Test
     void filterListByPoster() {
-        tweetListFilter.filterList(tweetList, "Yoda", null);
+        tweetList = tweetListFilter.filterList(tweetList, "Yoda", null);
         assertEquals(Collections.singletonList(tweetYoda), tweetList.getTweets());
     }
 
     @Test
     void filterListByPosterAndDate() {
-        tweetListFilter.filterList(tweetList, "Yoda", ancientDate);
+        tweetList = tweetListFilter.filterList(tweetList, "Yoda", ancientDate);
         assertEquals(Collections.singletonList(tweetYoda), tweetList.getTweets());
     }
 }
