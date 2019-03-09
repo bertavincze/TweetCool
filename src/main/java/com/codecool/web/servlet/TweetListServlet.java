@@ -43,7 +43,7 @@ public class TweetListServlet extends HttpServlet {
         }
 
         request.setAttribute("filtered", filtered);
-        request.getRequestDispatcher("tweets.jsp").forward(request, response);
+        request.getRequestDispatcher("tweetsfiltered.jsp").forward(request, response);
     }
 
 }
