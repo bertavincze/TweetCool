@@ -1,7 +1,9 @@
 package com.codecool.web.servlet;
 
+import com.codecool.web.model.Filter;
 import com.codecool.web.model.Tweet;
 import com.codecool.web.service.TweetList;
+import com.codecool.web.service.TweetListFilter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,25 +20,23 @@ import java.util.List;
 @WebServlet("/tweets")
 public class TweetListServlet extends HttpServlet {
 
-    private TweetList tweets;
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        tweets = (TweetList) request.getSession().getAttribute("tweets");
+        TweetList tweets = (TweetList) request.getSession().getAttribute("tweets");
 
         int limit = Integer.parseInt(request.getParameter("limit"));
         int offset = Integer.parseInt(request.getParameter("offset"));
         String poster = request.getParameter("poster");
         Date date = getDateFromString(request.getParameter("date"));
 
-        if (tweets != null && tweets.getTweets().size() < limit) {
-            limit = tweets.getTweets().size();
-            tweets.filterList(limit, offset, poster, date);
-            request.setAttribute("filtered", tweets);
-            request.getRequestDispatcher("tweets.jsp").forward(request, response);
+        if (tweets != null) {
+            TweetListFilter filter = new TweetListFilter(limit, offset);
+            tweets = filter.filterList(tweets, poster, date);
         }
 
+        request.setAttribute("tweets", tweets);
+        request.getRequestDispatcher("tweets.jsp").forward(request, response);
     }
 
     private Date getDateFromString(String dateString) {
