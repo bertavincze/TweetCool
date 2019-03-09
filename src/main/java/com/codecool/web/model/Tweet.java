@@ -16,6 +16,13 @@ public class Tweet {
         this.timeStamp = new Date(getTimeInMilliseconds());
     }
 
+    public Tweet(int id, String poster, String content, Date timeStamp) {
+        this.id = id;
+        this.poster = poster;
+        this.content = content;
+        this.timeStamp = timeStamp;
+    }
+
     public int getId() {
         return id;
     }
