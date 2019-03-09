@@ -12,11 +12,13 @@ import java.io.IOException;
 
 @WebServlet("/new-tweet")
 public class TweetServlet extends HttpServlet {
+
     private TweetList tweets = new TweetList();
     private int num = 0;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String name = request.getParameter("name");
         String content = request.getParameter("content");
         int id = num++;
