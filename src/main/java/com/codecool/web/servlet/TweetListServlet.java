@@ -16,33 +16,34 @@ import java.util.Date;
 @WebServlet("/tweets")
 public class TweetListServlet extends HttpServlet {
 
+    private final Date defaultDate = new Date(33010000);
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        TweetList tweets = (TweetList) request.getSession().getAttribute("tweets");
-
         int limit = Integer.parseInt(request.getParameter("limit"));
         int offset = Integer.parseInt(request.getParameter("offset"));
         String poster = request.getParameter("poster");
-        Date date = getDateFromString(request.getParameter("date"));
+        String dateString = request.getParameter("date");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+        TweetList tweets = (TweetList) request.getSession().getAttribute("tweets");
 
-        if (tweets != null) {
-            TweetListFilter filter = new TweetListFilter(limit, offset);
-            tweets = filter.filterList(tweets, poster, date);
+        Date date;
+        try {
+            date = sdf.parse(dateString);
+        } catch (ParseException e) {
+            date = defaultDate;
         }
 
-        request.setAttribute("tweets", tweets);
+        TweetList filtered = null;
+        if (tweets != null) {
+            TweetListFilter filter = new TweetListFilter(limit, offset);
+            filtered = filter.filterList(tweets, poster, date);
+        }
+
+        request.setAttribute("filtered", filtered);
         request.getRequestDispatcher("tweets.jsp").forward(request, response);
     }
 
-    private Date getDateFromString(String dateString) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
-        try {
-            return sdf.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
