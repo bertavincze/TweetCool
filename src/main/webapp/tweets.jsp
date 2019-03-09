@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.codecool.web.model.Tweet" %>
-<%@ page import="com.codecool.web.service.TweetList" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -21,49 +20,53 @@
 <div class="wrapper">
     <div class="content">
         <div class="container">
+
             <div class="containerhead">
                 <div class="title"><a href="">Tweets</a></div>
             </div>
 
-            <% TweetList tweets = (TweetList) request.getSession().getAttribute("tweets"); %>
-            <% if (tweets != null) { %>
-                <form action="/TweetCool/tweets" method="GET">
-                    Limit:
-                    <select id="limit" name="limit">
-                        <option value="10" selected>10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="40">40</option>
-                    </select>
-                    <br>
-                    Offset:
-                    <select id="offset" name="offset">
-                        <option value="0" selected>0</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                    </select>
-                    <br>
-                    Poster:
-                    <input type="text" name="poster">
-                    <br>
-                    Date:
-                    <input type="datetime-local" name="date" />
-                    <br>
-                    <p><input type="submit" value="Filter tweets"></p>
-                </form>
-                <% for (Tweet t : tweets.getTweets()) { %>
-                    <div class="divider"></div>
-                    <%= t.getPosterName() %> : <%= t.getContent() %> <br>
-                    <%= t.getTimestamp() %> <br>
-                    <div class="divider"></div>
-                    <br>
-                <% } %>
-            <% } else { %>
-            <p>No tweets have been sent yet!</p>
-            <% } %>
-<div class="containerfoot"></div>
-        </div>
+            <c:choose>
+                <c:when test="${tweets != null}">
+                    <form action="/TweetCool/tweets" method="GET">
+                        Limit:
+                        <select id="limit" name="limit">
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                        </select>
+                        <br>
+                        Offset:
+                        <select id="offset" name="offset">
+                            <option value="0" selected>0</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                        </select>
+                        <br>
+                        Poster:
+                        <input type="text" name="poster">
+                        <br>
+                        Date:
+                        <input type="datetime-local" name="date" />
+                        <br>
+                        <p><input type="submit" value="Filter tweets"></p>
+                    </form>
+                    <c:forEach var="tweet" items="${tweets.getTweets()}">
+                        <div class="divider"></div>
+                        <c:out value="${tweet.getPosterName()}"/> : <c:out value="${tweet.getContent()}"/><br>
+                        <c:out value="${tweet.getTimestamp()}"/><br>
+                        <div class="divider"></div>
+                        <br>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <p>No tweets have been sent yet!</p>
+                </c:otherwise>
+            </c:choose>
+
+    <div class="containerfoot"></div>
+    </div>
     </div>
 
     <div class="sidebar">
@@ -83,8 +86,6 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="tweets.jsp">Tweets</a></li>
             </ul>
-
-
 
         </div>
     </div>
