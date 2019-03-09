@@ -19,7 +19,9 @@ public class TweetListFilter {
     }
 
     private void setFilter(String poster, Date date) {
-        if (poster == null) {
+        if (poster == null && date == null) {
+            filter = Filter.NONE;
+        } else if (poster == null) {
             filter = Filter.DATE;
         } else if (date == null) {
             filter = Filter.POSTER;

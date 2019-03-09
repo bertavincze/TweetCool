@@ -4,5 +4,6 @@ public enum Filter {
 
     POSTER,
     DATE,
-    POSTERDATE
+    POSTERDATE,
+    NONE
 }
