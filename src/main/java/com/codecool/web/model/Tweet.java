@@ -32,10 +32,6 @@ public class Tweet {
         return timeStamp;
     }
 
-    public boolean isNewerThan(Date date) {
-        return this.getTimestamp().getTime() > date.getTime();
-    }
-
     private Long getTimeInMilliseconds() {
         Date date = new Date();
         return date.getTime();
