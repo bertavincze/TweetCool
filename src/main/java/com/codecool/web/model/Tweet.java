@@ -28,7 +28,11 @@ public class Tweet {
         return content;
     }
 
-    public Date getTimestamp() {
+    private Date getTimestamp() {
         return timeStamp;
+    }
+
+    public boolean isNewerThan(Date date) {
+        return this.getTimestamp().getTime() > date.getTime();
     }
 }

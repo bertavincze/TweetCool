@@ -27,22 +27,18 @@ public class TweetList {
         for (int i = offset; i < limit; i++) {
             if ((poster == null) && (date == null)) {
                 filtered.add(tweets.get(i));
-            } else if (poster.equals(tweets.get(i).getPosterName()) && (date == null)) {
+            } else if (tweets.get(i).getPosterName().equals(poster) && (date == null)) {
                 filtered.add(tweets.get(i));
-            } else if (poster.equals(tweets.get(i).getPosterName())) {
-                if (isNewer(date, i)) {
+            } else if (tweets.get(i).getPosterName().equals(poster)) {
+                if (tweets.get(i).isNewerThan(date)) {
                     filtered.add(tweets.get(i));
                 }
             } else {
-                if (isNewer(date, i)) {
+                if (tweets.get(i).isNewerThan(date)) {
                     filtered.add(tweets.get(i));
                 }
             }
         }
         tweets = filtered;
-    }
-
-    private boolean isNewer(Date date, int index) {
-        return tweets.get(index).getTimestamp().getTime() > date.getTime();
     }
 }
