@@ -30,11 +30,11 @@ public class TweetList {
             } else if (tweets.get(i).getPosterName().equals(poster) && (date == null)) {
                 filtered.add(tweets.get(i));
             } else if (tweets.get(i).getPosterName().equals(poster)) {
-                if (date != null && tweets.get(i).getTimestamp().after(date)) {
+                if (date != null && tweets.get(i).getTimestamp().compareTo(date) >= 0) {
                     filtered.add(tweets.get(i));
                 }
             } else {
-                if (date != null && tweets.get(i).getTimestamp().after(date)) {
+                if (date != null && tweets.get(i).getTimestamp().compareTo(date) >= 0) {
                     filtered.add(tweets.get(i));
                 }
             }
