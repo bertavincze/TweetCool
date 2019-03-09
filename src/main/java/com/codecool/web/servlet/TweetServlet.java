@@ -20,14 +20,12 @@ public class TweetServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
         String content = request.getParameter("content");
-        Date date = new Date();
         int id = num++;
-        tweets.addTweet(new Tweet(id, name, content, date));
+        tweets.addTweet(new Tweet(id, name, content));
 
         request.getSession().setAttribute("tweets", tweets);
         request.setAttribute("name", name);
         request.setAttribute("content", content);
-        request.setAttribute("date", date);
         request.getRequestDispatcher("index.html").forward(request, response);
     }
 }

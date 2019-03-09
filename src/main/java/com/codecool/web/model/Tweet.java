@@ -9,11 +9,11 @@ public class Tweet {
     private String content;
     private Date timeStamp;
 
-    public Tweet(int id, String poster, String content, Date timeStamp) {
+    public Tweet(int id, String poster, String content) {
         this.id = id;
         this.poster = poster;
         this.content = content;
-        this.timeStamp = timeStamp;
+        this.timeStamp = new Date(getTimeInMilliseconds());
     }
 
     public int getId() {
@@ -28,11 +28,16 @@ public class Tweet {
         return content;
     }
 
-    private Date getTimestamp() {
+    public Date getTimestamp() {
         return timeStamp;
     }
 
     public boolean isNewerThan(Date date) {
         return this.getTimestamp().getTime() > date.getTime();
+    }
+
+    private Long getTimeInMilliseconds() {
+        Date date = new Date();
+        return date.getTime();
     }
 }
