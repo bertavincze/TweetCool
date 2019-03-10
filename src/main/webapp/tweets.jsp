@@ -27,7 +27,7 @@
 
             <c:choose>
                 <c:when test="${tweets != null}">
-                    <form action="/TweetCool/tweets" method="GET">
+                    <form action="/TweetCool/tweets" method="POST">
                         Limit:
                         <select id="limit" name="limit">
                             <option value="10" selected>10</option>
