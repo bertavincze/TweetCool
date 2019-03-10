@@ -22,6 +22,16 @@ public class TweetListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        TweetList tweets = (TweetList) request.getSession().getAttribute("tweets");
+
+        request.setAttribute("tweets", tweets);
+        request.getRequestDispatcher("tweets.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
         int limit = Integer.parseInt(request.getParameter("limit"));
         int offset = Integer.parseInt(request.getParameter("offset"));
         String poster = request.getParameter("poster");
@@ -42,8 +52,8 @@ public class TweetListServlet extends HttpServlet {
             filtered = filter.filterList(tweets, poster, date);
         }
 
-        request.setAttribute("filtered", filtered);
-        request.getRequestDispatcher("tweetsfiltered.jsp").forward(request, response);
+        request.setAttribute("tweets", filtered);
+        request.getRequestDispatcher("tweets.jsp").include(request, response);
     }
 
 }
