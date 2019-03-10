@@ -46,7 +46,7 @@ public class XMLHandler {
         List<Element> elements = getElements(document.getDocumentElement());
         for (Element element: elements) {
             int id = Integer.parseInt(element.getElementsByTagName("id").item(0).getTextContent());
-            String poster = element.getElementsByTagName("poster name").item(0).getTextContent();
+            String poster = element.getElementsByTagName("poster").item(0).getTextContent();
             String content = element.getElementsByTagName("content").item(0).getTextContent();
             Date timestamp = sdf.parse(element.getElementsByTagName("timestamp").item(0).getTextContent());
             tweetList.addTweet(new Tweet(id,poster, content, timestamp));
@@ -70,7 +70,7 @@ public class XMLHandler {
         Element tempElement = document.createElement("tweet");
         document.getDocumentElement().appendChild(tempElement);
         createElement("id", String.valueOf(tweet.getId()), tempElement);
-        createElement("poster name", tweet.getPosterName(), tempElement);
+        createElement("poster", tweet.getPosterName(), tempElement);
         createElement("content", tweet.getContent(), tempElement);
         createElement("timestamp", sdf.format(tweet.getTimestamp()), tempElement);
     }
