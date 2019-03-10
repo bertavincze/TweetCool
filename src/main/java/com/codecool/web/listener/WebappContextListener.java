@@ -19,7 +19,7 @@ public final class WebappContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("This method is invoked once when the webapp gets deployed.");
         try {
-            xmlHandler.loadFromFile("tweets.xml");
+            xmlHandler.loadFromFile(sce.getServletContext().getRealPath("/") + "tweets.xml");
         } catch (IOException | SAXException | ParseException e) {
             e.printStackTrace();
         }
@@ -29,7 +29,7 @@ public final class WebappContextListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent sce) {
         System.out.println("This method is invoked once when the webapp gets undeployed.");
         try {
-            xmlHandler.saveToFile("tweets.xml");
+            xmlHandler.saveToFile(sce.getServletContext().getRealPath("/") + "tweets.xml");
         } catch (TransformerException e) {
             e.printStackTrace();
         }
