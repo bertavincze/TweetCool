@@ -15,8 +15,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class XMLHandler {
@@ -32,32 +34,31 @@ public class XMLHandler {
         this.sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
     }
 
-    public void addTweet(Tweet tweet) {
-        tweetList.addTweet(tweet);
-    }
-
-    public void loadFromFile(String filename) throws IOException, SAXException {
+    public void loadFromFile(String filename) throws IOException, SAXException, ParseException {
         DocumentBuilder db = createDocumentBuilder();
         InputStream is = new FileInputStream(filename);
         document = db.parse(is);
         document.getDocumentElement().normalize();
+        getTweetsFromFile();
     }
 
-    public void saveToFile(String filename) throws IOException, SAXException, TransformerException {
-        for (String file : getFiles()) {
-            if (filename.equals(file)) {
-                loadFromFile(filename);
-                break;
-            } else {
-                createNewXML();
-            }
+    private void getTweetsFromFile() throws ParseException {
+        List<Element> elements = getElements(document.getDocumentElement());
+        for (Element element: elements) {
+            int id = Integer.parseInt(element.getElementsByTagName("id").item(0).getTextContent());
+            String poster = element.getElementsByTagName("poster name").item(0).getTextContent();
+            String content = element.getElementsByTagName("content").item(0).getTextContent();
+            Date timestamp = sdf.parse(element.getElementsByTagName("timestamp").item(0).getTextContent());
+            tweetList.addTweet(new Tweet(id,poster, content, timestamp));
         }
-        transformToFile(filename);
-
-
     }
 
-    private void createNewXML() {
+    public void saveToFile(String filename) throws TransformerException {
+        createXML();
+        transformToFile(filename);
+    }
+
+    private void createXML() {
         Element root = document.createElement("tweets");
         document.appendChild(root);
         for (Tweet tweet : tweetList.getTweets()) {
@@ -68,10 +69,10 @@ public class XMLHandler {
     private void writeNodeToDocument(Tweet tweet) {
         Element tempElement = document.createElement("tweet");
         document.getDocumentElement().appendChild(tempElement);
-        createElement("id", String.valueOf(tweet.getId()));
-        createElement("poster name", tweet.getPosterName());
-        createElement("content", tweet.getContent());
-        createElement("timestamp", sdf.format(tweet.getTimestamp()));
+        createElement("id", String.valueOf(tweet.getId()), tempElement);
+        createElement("poster name", tweet.getPosterName(), tempElement);
+        createElement("content", tweet.getContent(), tempElement);
+        createElement("timestamp", sdf.format(tweet.getTimestamp()), tempElement);
     }
 
     private void transformToFile(String filename) throws TransformerException {
@@ -80,15 +81,6 @@ public class XMLHandler {
         DOMSource source = new DOMSource(document);
         StreamResult result = new StreamResult(new File(filename));
         transformer.transform(source, result);
-    }
-
-    private String getString(List<Element> elements, String name) {
-        for (Element element : elements) {
-            if (element.getTagName().equals(name)) {
-                return element.getTextContent();
-            }
-        }
-        throw new IllegalStateException();
     }
 
     private List<Element> getElements(Element parentNode) {
@@ -102,20 +94,6 @@ public class XMLHandler {
         return elements;
     }
 
-    private List<String> getFiles() {
-        List<String> fileNames = new ArrayList<>();
-        File folder = new File(".");
-        File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".xml"));
-        if (listOfFiles != null) {
-            for (File file : listOfFiles) {
-                if (file.isFile() && !file.getName().equals("pom.xml")) {
-                    fileNames.add(file.getName());
-                }
-            }
-        }
-        return fileNames;
-    }
-
     private DocumentBuilder createDocumentBuilder() {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = null;
@@ -127,9 +105,13 @@ public class XMLHandler {
         return db;
     }
 
-    private void createElement(String tagName, String textContent) {
-        Element element = document.createElement(tagName);
-        element.setTextContent(textContent);
-        document.getDocumentElement().appendChild(element);
+    private void createElement(String tagName, String textContent, Element element) {
+        Element newElement = document.createElement(tagName);
+        newElement.setTextContent(textContent);
+        element.appendChild(newElement);
+    }
+
+    public TweetList getTweetList() {
+        return tweetList;
     }
 }
