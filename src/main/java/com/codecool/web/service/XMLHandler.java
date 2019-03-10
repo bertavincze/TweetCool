@@ -44,13 +44,15 @@ public class XMLHandler {
 
     private void getTweetsFromFile() throws ParseException {
         List<Element> elements = getElements(document.getDocumentElement());
+        TweetList tweets = new TweetList();
         for (Element element: elements) {
             int id = Integer.parseInt(element.getElementsByTagName("id").item(0).getTextContent());
             String poster = element.getElementsByTagName("poster").item(0).getTextContent();
             String content = element.getElementsByTagName("content").item(0).getTextContent();
             Date timestamp = sdf.parse(element.getElementsByTagName("timestamp").item(0).getTextContent());
-            tweetList.addTweet(new Tweet(id,poster, content, timestamp));
+            tweets.addTweet(new Tweet(id,poster, content, timestamp));
         }
+        tweetList = tweets;
     }
 
     public void saveToFile(String filename) throws TransformerException {
