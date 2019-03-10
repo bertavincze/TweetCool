@@ -20,8 +20,4 @@ public class TweetList {
     public List<Tweet> getTweets() {
         return tweets;
     }
-
-    public void setTweets(List<Tweet> tweets) {
-        this.tweets = tweets;
-    }
 }
