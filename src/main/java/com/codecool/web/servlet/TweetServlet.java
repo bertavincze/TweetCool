@@ -1,5 +1,6 @@
 package com.codecool.web.servlet;
 
+import com.codecool.web.listener.WebappContextListener;
 import com.codecool.web.model.Tweet;
 import com.codecool.web.service.TweetList;
 
@@ -22,7 +23,12 @@ public class TweetServlet extends HttpServlet {
         String name = request.getParameter("name");
         String content = request.getParameter("content");
         int id = num++;
-        tweets.addTweet(new Tweet(id, name, content));
+        Tweet tweet = new Tweet(id, name, content);
+
+        if (!WebappContextListener.xmlHandler.getTweetList().getTweets().isEmpty()) {
+            tweets = WebappContextListener.xmlHandler.getTweetList();
+        }
+        tweets.addTweet(tweet);
 
         request.getSession().setAttribute("tweets", tweets);
         request.setAttribute("name", name);
