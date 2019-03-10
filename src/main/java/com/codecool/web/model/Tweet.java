@@ -7,20 +7,20 @@ public class Tweet {
     private int id;
     private String poster;
     private String content;
-    private Date timeStamp;
+    private Date timestamp;
 
     public Tweet(int id, String poster, String content) {
         this.id = id;
         this.poster = poster;
         this.content = content;
-        this.timeStamp = new Date(getTimeInMilliseconds());
+        this.timestamp = new Date(System.currentTimeMillis());
     }
 
-    public Tweet(int id, String poster, String content, Date timeStamp) {
+    public Tweet(int id, String poster, String content, Date timestamp) {
         this.id = id;
         this.poster = poster;
         this.content = content;
-        this.timeStamp = timeStamp;
+        this.timestamp = timestamp;
     }
 
     public int getId() {
@@ -36,11 +36,6 @@ public class Tweet {
     }
 
     public Date getTimestamp() {
-        return timeStamp;
-    }
-
-    private Long getTimeInMilliseconds() {
-        Date date = new Date();
-        return date.getTime();
+        return timestamp;
     }
 }
