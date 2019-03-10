@@ -27,8 +27,9 @@ public class TweetServlet extends HttpServlet {
 
         if (!WebappContextListener.xmlHandler.getTweetList().getTweets().isEmpty()) {
             tweets = WebappContextListener.xmlHandler.getTweetList();
+        } else {
+            tweets.addTweet(tweet);
         }
-        tweets.addTweet(tweet);
         WebappContextListener.xmlHandler.getTweetList().addTweet(tweet);
 
         request.getSession().setAttribute("tweets", tweets);
