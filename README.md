@@ -9,3 +9,7 @@ Completed tasks & functionality:
 - Users can also set a limit (number of results to return) and an offset (results to skip) on this page
 - If the server stops, tweets are saved to an xml file where they will be reloaded from upon startup
 - All classes containing business code have unit tests
+
+TODO:
+- Singleton class for TweetList
+- Javascript to refresh page constantly
